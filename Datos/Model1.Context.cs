@@ -12,6 +12,8 @@ namespace Entidad
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class db_LenguajesProyecto : DbContext
     {
@@ -30,5 +32,123 @@ namespace Entidad
         public virtual DbSet<Plato> Plato { get; set; }
         public virtual DbSet<Tipo_Usuario> Tipo_Usuario { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+    
+        public virtual int Borrar(Nullable<int> platoID)
+        {
+            var platoIDParameter = platoID.HasValue ?
+                new ObjectParameter("PlatoID", platoID) :
+                new ObjectParameter("PlatoID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Borrar", platoIDParameter);
+        }
+    
+        public virtual ObjectResult<Buscar_Result> Buscar(string name)
+        {
+            var nameParameter = name != null ?
+                new ObjectParameter("Name", name) :
+                new ObjectParameter("Name", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Buscar_Result>("Buscar", nameParameter);
+        }
+    
+        public virtual int eliminar_Usuario(Nullable<int> usuarioId)
+        {
+            var usuarioIdParameter = usuarioId.HasValue ?
+                new ObjectParameter("UsuarioId", usuarioId) :
+                new ObjectParameter("UsuarioId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("eliminar_Usuario", usuarioIdParameter);
+        }
+    
+        public virtual int insert_Usuario(Nullable<int> usuarioId, Nullable<int> tipoUsuario, string contraseña, string nombreUsusario, string telefono, string direccion, Nullable<bool> habilitado)
+        {
+            var usuarioIdParameter = usuarioId.HasValue ?
+                new ObjectParameter("UsuarioId", usuarioId) :
+                new ObjectParameter("UsuarioId", typeof(int));
+    
+            var tipoUsuarioParameter = tipoUsuario.HasValue ?
+                new ObjectParameter("TipoUsuario", tipoUsuario) :
+                new ObjectParameter("TipoUsuario", typeof(int));
+    
+            var contraseñaParameter = contraseña != null ?
+                new ObjectParameter("Contraseña", contraseña) :
+                new ObjectParameter("Contraseña", typeof(string));
+    
+            var nombreUsusarioParameter = nombreUsusario != null ?
+                new ObjectParameter("NombreUsusario", nombreUsusario) :
+                new ObjectParameter("NombreUsusario", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            var direccionParameter = direccion != null ?
+                new ObjectParameter("Direccion", direccion) :
+                new ObjectParameter("Direccion", typeof(string));
+    
+            var habilitadoParameter = habilitado.HasValue ?
+                new ObjectParameter("Habilitado", habilitado) :
+                new ObjectParameter("Habilitado", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insert_Usuario", usuarioIdParameter, tipoUsuarioParameter, contraseñaParameter, nombreUsusarioParameter, telefonoParameter, direccionParameter, habilitadoParameter);
+        }
+    
+        public virtual int InsertarPalto(string descripcion, Nullable<decimal> precio, Nullable<bool> disponible, string nombre, byte[] fotografia)
+        {
+            var descripcionParameter = descripcion != null ?
+                new ObjectParameter("Descripcion", descripcion) :
+                new ObjectParameter("Descripcion", typeof(string));
+    
+            var precioParameter = precio.HasValue ?
+                new ObjectParameter("Precio", precio) :
+                new ObjectParameter("Precio", typeof(decimal));
+    
+            var disponibleParameter = disponible.HasValue ?
+                new ObjectParameter("Disponible", disponible) :
+                new ObjectParameter("Disponible", typeof(bool));
+    
+            var nombreParameter = nombre != null ?
+                new ObjectParameter("Nombre", nombre) :
+                new ObjectParameter("Nombre", typeof(string));
+    
+            var fotografiaParameter = fotografia != null ?
+                new ObjectParameter("Fotografia", fotografia) :
+                new ObjectParameter("Fotografia", typeof(byte[]));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertarPalto", descripcionParameter, precioParameter, disponibleParameter, nombreParameter, fotografiaParameter);
+        }
+    
+        public virtual int Modificar_Usuario(Nullable<int> usuarioId, Nullable<int> tipoUsuario, string contraseña, string nombreUsusario, string telefono, string direccion, Nullable<bool> habilitado)
+        {
+            var usuarioIdParameter = usuarioId.HasValue ?
+                new ObjectParameter("UsuarioId", usuarioId) :
+                new ObjectParameter("UsuarioId", typeof(int));
+    
+            var tipoUsuarioParameter = tipoUsuario.HasValue ?
+                new ObjectParameter("TipoUsuario", tipoUsuario) :
+                new ObjectParameter("TipoUsuario", typeof(int));
+    
+            var contraseñaParameter = contraseña != null ?
+                new ObjectParameter("Contraseña", contraseña) :
+                new ObjectParameter("Contraseña", typeof(string));
+    
+            var nombreUsusarioParameter = nombreUsusario != null ?
+                new ObjectParameter("NombreUsusario", nombreUsusario) :
+                new ObjectParameter("NombreUsusario", typeof(string));
+    
+            var telefonoParameter = telefono != null ?
+                new ObjectParameter("Telefono", telefono) :
+                new ObjectParameter("Telefono", typeof(string));
+    
+            var direccionParameter = direccion != null ?
+                new ObjectParameter("Direccion", direccion) :
+                new ObjectParameter("Direccion", typeof(string));
+    
+            var habilitadoParameter = habilitado.HasValue ?
+                new ObjectParameter("Habilitado", habilitado) :
+                new ObjectParameter("Habilitado", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Modificar_Usuario", usuarioIdParameter, tipoUsuarioParameter, contraseñaParameter, nombreUsusarioParameter, telefonoParameter, direccionParameter, habilitadoParameter);
+        }
     }
 }

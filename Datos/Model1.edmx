@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="LenguajesProyectoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="LenguajesProyectoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Estado">
           <Key>
             <PropertyRef Name="EstadoID" />
@@ -100,6 +100,40 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="Borrar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PlatoID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Buscar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Name" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="eliminar_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="insert_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="TipoUsuario" Type="int" Mode="In" />
+          <Parameter Name="Contraseña" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreUsusario" Type="nvarchar" Mode="In" />
+          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="Direccion" Type="nvarchar" Mode="In" />
+          <Parameter Name="Habilitado" Type="bit" Mode="In" />
+        </Function>
+        <Function Name="InsertarPalto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Descripcion" Type="nvarchar" Mode="In" />
+          <Parameter Name="Precio" Type="money" Mode="In" />
+          <Parameter Name="Disponible" Type="bit" Mode="In" />
+          <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
+          <Parameter Name="Fotografia" Type="image" Mode="In" />
+        </Function>
+        <Function Name="Modificar_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UsuarioId" Type="int" Mode="In" />
+          <Parameter Name="TipoUsuario" Type="int" Mode="In" />
+          <Parameter Name="Contraseña" Type="nvarchar" Mode="In" />
+          <Parameter Name="NombreUsusario" Type="nvarchar" Mode="In" />
+          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
+          <Parameter Name="Direccion" Type="nvarchar" Mode="In" />
+          <Parameter Name="Habilitado" Type="bit" Mode="In" />
+        </Function>
         <EntityContainer Name="LenguajesProyectoModelStoreContainer">
           <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
@@ -123,8 +157,7 @@
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LenguajesProyectoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -253,7 +286,49 @@
             <End Role="Tipo_Usuario" EntitySet="Tipo_Usuario" />
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
+          <FunctionImport Name="Borrar">
+          <Parameter Name="PlatoID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Buscar" ReturnType="Collection(LenguajesProyectoModel.Buscar_Result)">
+          <Parameter Name="Name" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="eliminar_Usuario">
+          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="insert_Usuario">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="TipoUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Contraseña" Mode="In" Type="String" />
+            <Parameter Name="NombreUsusario" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Direccion" Mode="In" Type="String" />
+            <Parameter Name="Habilitado" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="InsertarPalto">
+            <Parameter Name="Descripcion" Mode="In" Type="String" />
+            <Parameter Name="Precio" Mode="In" Type="Decimal" />
+            <Parameter Name="Disponible" Mode="In" Type="Boolean" />
+            <Parameter Name="Nombre" Mode="In" Type="String" />
+            <Parameter Name="Fotografia" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="Modificar_Usuario">
+            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
+            <Parameter Name="TipoUsuario" Mode="In" Type="Int32" />
+            <Parameter Name="Contraseña" Mode="In" Type="String" />
+            <Parameter Name="NombreUsusario" Mode="In" Type="String" />
+            <Parameter Name="Telefono" Mode="In" Type="String" />
+            <Parameter Name="Direccion" Mode="In" Type="String" />
+            <Parameter Name="Habilitado" Mode="In" Type="Boolean" />
+          </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="Buscar_Result">
+          <Property Type="Int32" Name="PlatoID" Nullable="false" />
+          <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
+          <Property Type="Decimal" Name="Precio" Nullable="false" Precision="19" />
+          <Property Type="Boolean" Name="DisponibleS_N" Nullable="true" />
+          <Property Type="Binary" Name="Fotografia" Nullable="false" MaxLength="Max" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -312,6 +387,23 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Borrar" FunctionName="LenguajesProyectoModel.Store.Borrar" />
+          <FunctionImportMapping FunctionImportName="Buscar" FunctionName="LenguajesProyectoModel.Store.Buscar">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LenguajesProyectoModel.Buscar_Result">
+                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="DisponibleS_N" ColumnName="DisponibleS/N" />
+                <ScalarProperty Name="Fotografia" ColumnName="Fotografia" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="eliminar_Usuario" FunctionName="LenguajesProyectoModel.Store.eliminar_Usuario" />
+          <FunctionImportMapping FunctionImportName="insert_Usuario" FunctionName="LenguajesProyectoModel.Store.insert_Usuario" />
+          <FunctionImportMapping FunctionImportName="InsertarPalto" FunctionName="LenguajesProyectoModel.Store.InsertarPalto" />
+          <FunctionImportMapping FunctionImportName="Modificar_Usuario" FunctionName="LenguajesProyectoModel.Store.Modificar_Usuario" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

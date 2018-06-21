@@ -15,9 +15,9 @@ namespace Datos
             return db.Usuario.ToList(); ;
 
         }
-        public Boolean AgregarUsuario(Usuario usuario)
+        public Boolean AgregarUsuario(int UsuarioID,int tipoUsuario,String contrasena,String nombreUsuario,String telefono,String direccion,Boolean habilitado)
         {
-            db.Usuario.Add(usuario);
+            db.insert_Usuario(UsuarioID,tipoUsuario,contrasena,nombreUsuario,telefono,direccion,habilitado);
             db.SaveChanges();
             return true;
         }
@@ -28,24 +28,16 @@ namespace Datos
 
         }
 
-       
-
         public Boolean EliminarUsuario(int id)
         {
-            db.Usuario.Remove(BuscarUsuario( id));
+            db.eliminar_Usuario(id);
             db.SaveChanges();
             return true;
         }
 
-        public Boolean ModificarUsuario(Usuario newUser, int id)
+        public Boolean ModificarUsuario(int UsuarioID, int tipoUsuario, String contrasena, String nombreUsuario, String telefono, String direccion, Boolean habilitado)
         {
-            Usuario usuario = BuscarUsuario(id);
-
-            usuario.TipoUsuarioID = newUser.TipoUsuarioID;
-            usuario.Contraseña = newUser.Contraseña;
-            usuario.NombreUsusario = newUser.NombreUsusario;
-            usuario.HabilitadoS_N = usuario.HabilitadoS_N;
-
+            db.Modificar_Usuario(UsuarioID, tipoUsuario, contrasena, nombreUsuario, telefono, direccion, habilitado);
             db.SaveChanges();
 
             return true;
