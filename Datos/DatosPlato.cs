@@ -34,6 +34,15 @@ namespace Datos
 
         }
 
+
+
+        public List<Plato> ListaPlatos(String nombre) {
+
+            BDLenguajesProyectoEntities.BuscarPlato(nombre);
+
+
+        } 
+
      
 
         public Plato BuscarPlatoPorFecha(DateTime date)

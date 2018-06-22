@@ -14,7 +14,6 @@
         <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Plato" ManuallyRouted="false" />
         <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Vista_Clientes" Width="1.5" PointX="5.375" PointY="4.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
