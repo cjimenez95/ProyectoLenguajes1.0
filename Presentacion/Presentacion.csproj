@@ -74,6 +74,7 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="AgregarUsuario.aspx" />
+    <Content Include="InicioCocina.aspx" />
     <Content Include="PaginaMaestra.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -93,6 +94,13 @@
     </Compile>
     <Compile Include="AgregarUsuario.aspx.designer.cs">
       <DependentUpon>AgregarUsuario.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InicioCocina.aspx.cs">
+      <DependentUpon>InicioCocina.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioCocina.aspx.designer.cs">
+      <DependentUpon>InicioCocina.aspx</DependentUpon>
     </Compile>
     <Compile Include="Insertar.aspx.cs">
       <DependentUpon>Insertar.aspx</DependentUpon>
