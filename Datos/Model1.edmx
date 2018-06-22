@@ -44,12 +44,26 @@
           <Key>
             <PropertyRef Name="UsuarioID" />
           </Key>
-          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoUsuarioID" Type="tinyint" Nullable="false" />
           <Property Name="Contraseña" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="NombreUsusario" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Telefono" Type="nvarchar" MaxLength="8" />
           <Property Name="Direccion" Type="nvarchar" MaxLength="10" />
+          <Property Name="HabilitadoS/N" Type="bit" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="Vista_Clientes">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+            <PropertyRef Name="NombreUsusario" />
+          </Key>
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
+          <Property Name="NombreUsusario" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefono" Type="nvarchar" MaxLength="8" />
+          <Property Name="Direccion" Type="nvarchar" MaxLength="10" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
           <Property Name="HabilitadoS/N" Type="bit" />
         </EntityType>
         <Association Name="FK_Pedido_Estado">
@@ -110,7 +124,6 @@
           <Parameter Name="UsuarioId" Type="int" Mode="In" />
         </Function>
         <Function Name="insert_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UsuarioId" Type="int" Mode="In" />
           <Parameter Name="TipoUsuario" Type="int" Mode="In" />
           <Parameter Name="Contraseña" Type="nvarchar" Mode="In" />
           <Parameter Name="NombreUsusario" Type="nvarchar" Mode="In" />
@@ -134,12 +147,23 @@
           <Parameter Name="Direccion" Type="nvarchar" Mode="In" />
           <Parameter Name="Habilitado" Type="bit" Mode="In" />
         </Function>
+        <Function Name="MostrarClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LenguajesProyectoModelStoreContainer">
           <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plato" EntityType="Self.Plato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Usuario" EntityType="Self.Tipo_Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Vista_Clientes" EntityType="Self.Vista_Clientes" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Vista_Clientes].[UsuarioID] AS [UsuarioID], 
+    [Vista_Clientes].[NombreUsusario] AS [NombreUsusario], 
+    [Vista_Clientes].[Telefono] AS [Telefono], 
+    [Vista_Clientes].[Direccion] AS [Direccion], 
+    [Vista_Clientes].[Descripcion] AS [Descripcion], 
+    [Vista_Clientes].[HabilitadoS/N] AS [HabilitadoS/N]
+    FROM [dbo].[Vista_Clientes] AS [Vista_Clientes]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Pedido_Estado" Association="Self.FK_Pedido_Estado">
             <End Role="Estado" EntitySet="Estado" />
             <End Role="Pedido" EntitySet="Pedido" />
@@ -296,7 +320,6 @@
           <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="insert_Usuario">
-            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
             <Parameter Name="TipoUsuario" Mode="In" Type="Int32" />
             <Parameter Name="Contraseña" Mode="In" Type="String" />
             <Parameter Name="NombreUsusario" Mode="In" Type="String" />
@@ -320,6 +343,8 @@
             <Parameter Name="Direccion" Mode="In" Type="String" />
             <Parameter Name="Habilitado" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <FunctionImport Name="MostrarClientes" ReturnType="Collection(LenguajesProyectoModel.MostrarClientes_Result)" />
+          <EntitySet Name="Vista_Clientes" EntityType="LenguajesProyectoModel.Vista_Clientes" />
         </EntityContainer>
         <ComplexType Name="Buscar_Result">
           <Property Type="Int32" Name="PlatoID" Nullable="false" />
@@ -329,6 +354,26 @@
           <Property Type="Binary" Name="Fotografia" Nullable="false" MaxLength="Max" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
         </ComplexType>
+        <ComplexType Name="MostrarClientes_Result">
+          <Property Type="Int32" Name="UsuarioID" Nullable="false" />
+          <Property Type="String" Name="NombreUsusario" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
+          <Property Type="Boolean" Name="HabilitadoS_N" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Vista_Clientes">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+            <PropertyRef Name="NombreUsusario" />
+          </Key>
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="NombreUsusario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="HabilitadoS_N" Type="Boolean" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -404,6 +449,30 @@
           <FunctionImportMapping FunctionImportName="insert_Usuario" FunctionName="LenguajesProyectoModel.Store.insert_Usuario" />
           <FunctionImportMapping FunctionImportName="InsertarPalto" FunctionName="LenguajesProyectoModel.Store.InsertarPalto" />
           <FunctionImportMapping FunctionImportName="Modificar_Usuario" FunctionName="LenguajesProyectoModel.Store.Modificar_Usuario" />
+          <FunctionImportMapping FunctionImportName="MostrarClientes" FunctionName="LenguajesProyectoModel.Store.MostrarClientes">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LenguajesProyectoModel.MostrarClientes_Result">
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Vista_Clientes">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Vista_Clientes">
+              <MappingFragment StoreEntitySet="Vista_Clientes">
+                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

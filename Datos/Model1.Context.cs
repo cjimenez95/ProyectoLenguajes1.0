@@ -32,6 +32,7 @@ namespace Entidad
         public virtual DbSet<Plato> Plato { get; set; }
         public virtual DbSet<Tipo_Usuario> Tipo_Usuario { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
+        public virtual DbSet<Vista_Clientes> Vista_Clientes { get; set; }
     
         public virtual int Borrar(Nullable<int> platoID)
         {
@@ -60,12 +61,8 @@ namespace Entidad
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("eliminar_Usuario", usuarioIdParameter);
         }
     
-        public virtual int insert_Usuario(Nullable<int> usuarioId, Nullable<int> tipoUsuario, string contraseña, string nombreUsusario, string telefono, string direccion, Nullable<bool> habilitado)
+        public virtual int insert_Usuario(Nullable<int> tipoUsuario, string contraseña, string nombreUsusario, string telefono, string direccion, Nullable<bool> habilitado)
         {
-            var usuarioIdParameter = usuarioId.HasValue ?
-                new ObjectParameter("UsuarioId", usuarioId) :
-                new ObjectParameter("UsuarioId", typeof(int));
-    
             var tipoUsuarioParameter = tipoUsuario.HasValue ?
                 new ObjectParameter("TipoUsuario", tipoUsuario) :
                 new ObjectParameter("TipoUsuario", typeof(int));
@@ -90,7 +87,7 @@ namespace Entidad
                 new ObjectParameter("Habilitado", habilitado) :
                 new ObjectParameter("Habilitado", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insert_Usuario", usuarioIdParameter, tipoUsuarioParameter, contraseñaParameter, nombreUsusarioParameter, telefonoParameter, direccionParameter, habilitadoParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("insert_Usuario", tipoUsuarioParameter, contraseñaParameter, nombreUsusarioParameter, telefonoParameter, direccionParameter, habilitadoParameter);
         }
     
         public virtual int InsertarPalto(string descripcion, Nullable<decimal> precio, Nullable<bool> disponible, string nombre, byte[] fotografia)
@@ -149,6 +146,11 @@ namespace Entidad
                 new ObjectParameter("Habilitado", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("Modificar_Usuario", usuarioIdParameter, tipoUsuarioParameter, contraseñaParameter, nombreUsusarioParameter, telefonoParameter, direccionParameter, habilitadoParameter);
+        }
+    
+        public virtual ObjectResult<MostrarClientes_Result> MostrarClientes()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MostrarClientes_Result>("MostrarClientes");
         }
     }
 }

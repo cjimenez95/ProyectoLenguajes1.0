@@ -74,6 +74,8 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="AgregarUsuario.aspx" />
+    <Content Include="EliminarUsuarios.aspx" />
+    <Content Include="ModificarUsuarios.aspx" />
     <Content Include="PaginaMaestra.Master" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -94,12 +96,26 @@
     <Compile Include="AgregarUsuario.aspx.designer.cs">
       <DependentUpon>AgregarUsuario.aspx</DependentUpon>
     </Compile>
+    <Compile Include="EliminarUsuarios.aspx.cs">
+      <DependentUpon>EliminarUsuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EliminarUsuarios.aspx.designer.cs">
+      <DependentUpon>EliminarUsuarios.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Insertar.aspx.cs">
       <DependentUpon>Insertar.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Insertar.aspx.designer.cs">
       <DependentUpon>Insertar.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModificarUsuarios.aspx.cs">
+      <DependentUpon>ModificarUsuarios.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ModificarUsuarios.aspx.designer.cs">
+      <DependentUpon>ModificarUsuarios.aspx</DependentUpon>
     </Compile>
     <Compile Include="PaginaMaestra.Master.cs">
       <DependentUpon>PaginaMaestra.Master</DependentUpon>

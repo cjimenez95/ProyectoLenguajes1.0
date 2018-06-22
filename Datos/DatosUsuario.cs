@@ -10,16 +10,21 @@ namespace Datos
         db_LenguajesProyecto db = new db_LenguajesProyecto();
 
 
-        public List<Usuario> ListarUsuarioss()
+        public List<Vista_Clientes> ListaUsuarioss()
         {
-            return db.Usuario.ToList(); ;
+            return db.Vista_Clientes.ToList();
 
         }
-        public Boolean AgregarUsuario(int UsuarioID,int tipoUsuario,String contrasena,String nombreUsuario,String telefono,String direccion,Boolean habilitado)
+        public Boolean AgregarUsuario(int tipoUsuario,String contrasena,String nombreUsuario,String telefono,String direccion,Boolean habilitado)
         {
-            db.insert_Usuario(UsuarioID,tipoUsuario,contrasena,nombreUsuario,telefono,direccion,habilitado);
+            db.insert_Usuario(tipoUsuario,contrasena,nombreUsuario,telefono,direccion,habilitado);
             db.SaveChanges();
             return true;
+        }
+
+        public List<Usuario> getUsuarios() {
+
+            return db.Usuario.ToList();
         }
 
         public Usuario BuscarUsuario(int id)
