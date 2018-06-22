@@ -16,7 +16,7 @@ namespace Entidad
         public int PlatoID { get; set; }
         public string Descripcion { get; set; }
         public decimal Precio { get; set; }
-        public Nullable<bool> DisponibleS_N { get; set; }
+        public bool DisponibleS_N { get; set; }
         public byte[] Fotografia { get; set; }
         public string Nombre { get; set; }
     }

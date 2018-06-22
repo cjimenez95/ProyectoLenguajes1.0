@@ -8,7 +8,7 @@ namespace Datos
 {
     public class DatosPlato
     {
-        db_LenguajesProyecto BDLenguajesProyectoEntities = new db_LenguajesProyecto();
+        dbLenguajesProyectoEntities BDLenguajesProyectoEntities = new dbLenguajesProyectoEntities();
 
         public List<Plato> ListarPlatos()
         { 
@@ -33,15 +33,6 @@ namespace Datos
             return Platos;
 
         }
-
-
-
-        public List<Plato> ListaPlatos(String nombre) {
-
-            BDLenguajesProyectoEntities.BuscarPlato(nombre);
-
-
-        } 
 
      
 

@@ -13,10 +13,11 @@ namespace Negocio
 
          DatosUsuario datos = new DatosUsuario();
 
-        public bool agregarUsuario( int tipoUsuario, String contrasena, String nombreUsuario, String telefono, String direccion, Boolean habilitado) {
+        //public bool agregarUsuario( int tipoUsuario, String contrasena, String nombreUsuario, String telefono, String direccion, Boolean habilitado) {
 
-            return datos.AgregarUsuario(tipoUsuario, contrasena, nombreUsuario, telefono, direccion, habilitado);
-        }
+        //    return datos.AgregarUsuario(tipoUsuario, contrasena, nombreUsuario, telefono, direccion, habilitado);
+        //}
+
         public Boolean ModificarUsuario(int UsuarioID, int tipoUsuario, String contrasena, String nombreUsuario, String telefono, String direccion, Boolean habilitado)
         {
             return datos.ModificarUsuario(UsuarioID,tipoUsuario, contrasena, nombreUsuario, telefono, direccion, habilitado);
@@ -25,9 +26,10 @@ namespace Negocio
 
             return datos.getUsuarios();
         }
-        public List<Vista_Clientes> listaBorrar() {
-            return datos.ListaUsuarioss();
-        }
+        //public List<Vista_Clientes> listaBorrar() {
+        //    return datos.ListaUsuarioss();
+        //}
+
         public bool eliminarUsuario(int id) {
 
            return datos.EliminarUsuario(id);

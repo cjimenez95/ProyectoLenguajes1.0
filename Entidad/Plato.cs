@@ -17,18 +17,17 @@ namespace Entidad
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Plato()
         {
-            this.Pedido = new HashSet<Pedido>();
+            this.Linea_Pedido = new HashSet<Linea_Pedido>();
         }
     
         public int PlatoID { get; set; }
         public string Descripcion { get; set; }
         public decimal Precio { get; set; }
-        public Nullable<bool> DisponibleS_N { get; set; }
+        public bool DisponibleS_N { get; set; }
         public byte[] Fotografia { get; set; }
         public string Nombre { get; set; }
-        public bool Disponible { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Pedido> Pedido { get; set; }
+        public virtual ICollection<Linea_Pedido> Linea_Pedido { get; set; }
     }
 }

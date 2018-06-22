@@ -4,14 +4,16 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="bf26993f0e554ac7b22b12e648a62276" Name="Diagram1">
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Estado" Width="1.5" PointX="3" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Pedido" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Plato" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+      <Diagram DiagramId="da889f29b5874b52b18cd72ca1bfa9ae" Name="Diagram1">
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Estado" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Linea_Pedido" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Pedido" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Plato" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="LenguajesProyectoModel.Tipo_Usuario" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
         <EntityTypeShape EntityType="LenguajesProyectoModel.Usuario" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
         <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Estado" ManuallyRouted="false" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Plato" ManuallyRouted="false" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_Linea_Pedido_Pedido" ManuallyRouted="false" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_Linea_Pedido_Plato" ManuallyRouted="false" />
         <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" ManuallyRouted="false" />
       </Diagram>

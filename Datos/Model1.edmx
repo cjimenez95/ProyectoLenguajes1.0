@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="LenguajesProyectoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="LenguajesProyectoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Estado">
           <Key>
             <PropertyRef Name="EstadoID" />
@@ -12,14 +12,24 @@
           <Property Name="EstadoID" Type="tinyint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
+        <EntityType Name="Linea_Pedido">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+            <PropertyRef Name="PlatoID" />
+          </Key>
+          <Property Name="PedidoID" Type="int" Nullable="false" />
+          <Property Name="PrecioPorPlato" Type="money" Nullable="false" />
+          <Property Name="PlatoID" Type="int" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
+          <Property Name="Cantidad" Type="tinyint" Nullable="false" />
+        </EntityType>
         <EntityType Name="Pedido">
           <Key>
             <PropertyRef Name="PedidoID" />
           </Key>
           <Property Name="PedidoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="PlatoID" Type="int" />
           <Property Name="EstadoID" Type="tinyint" Nullable="false" />
-          <Property Name="UsuarioID" Type="int" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
           <Property Name="Fecha" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="Plato">
@@ -29,8 +39,8 @@
           <Property Name="PlatoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Descripcion" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="Precio" Type="money" Nullable="false" />
-          <Property Name="DisponibleS/N" Type="bit" />
-          <Property Name="Fotografia" Type="image" Nullable="false" />
+          <Property Name="DisponibleS/N" Type="bit" Nullable="false" />
+          <Property Name="Fotografia" Type="image" />
           <Property Name="Nombre" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Tipo_Usuario">
@@ -44,7 +54,7 @@
           <Key>
             <PropertyRef Name="UsuarioID" />
           </Key>
-          <Property Name="UsuarioID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UsuarioID" Type="int" Nullable="false" />
           <Property Name="TipoUsuarioID" Type="tinyint" Nullable="false" />
           <Property Name="Contraseña" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="NombreUsusario" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -52,20 +62,30 @@
           <Property Name="Direccion" Type="nvarchar" MaxLength="10" />
           <Property Name="HabilitadoS/N" Type="bit" />
         </EntityType>
-        <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-        <EntityType Name="Vista_Clientes">
-          <Key>
-            <PropertyRef Name="UsuarioID" />
-            <PropertyRef Name="NombreUsusario" />
-          </Key>
-          <Property Name="UsuarioID" Type="int" Nullable="false" />
-          <Property Name="NombreUsusario" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Telefono" Type="nvarchar" MaxLength="8" />
-          <Property Name="Direccion" Type="nvarchar" MaxLength="10" />
-          <Property Name="Descripcion" Type="nvarchar" MaxLength="100" />
-          <Property Name="HabilitadoS/N" Type="bit" />
-        </EntityType>
+        <Association Name="FK_Linea_Pedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="Linea_Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linea_Pedido_Plato">
+          <End Role="Plato" Type="Self.Plato" Multiplicity="1" />
+          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plato">
+              <PropertyRef Name="PlatoID" />
+            </Principal>
+            <Dependent Role="Linea_Pedido">
+              <PropertyRef Name="PlatoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Pedido_Estado">
           <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
           <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
@@ -78,20 +98,8 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Pedido_Plato">
-          <End Role="Plato" Type="Self.Plato" Multiplicity="0..1" />
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plato">
-              <PropertyRef Name="PlatoID" />
-            </Principal>
-            <Dependent Role="Pedido">
-              <PropertyRef Name="PlatoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Pedido_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -120,17 +128,6 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
         <Function Name="Buscar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Name" Type="varchar" Mode="In" />
         </Function>
-        <Function Name="eliminar_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UsuarioId" Type="int" Mode="In" />
-        </Function>
-        <Function Name="insert_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="TipoUsuario" Type="int" Mode="In" />
-          <Parameter Name="Contraseña" Type="nvarchar" Mode="In" />
-          <Parameter Name="NombreUsusario" Type="nvarchar" Mode="In" />
-          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
-          <Parameter Name="Direccion" Type="nvarchar" Mode="In" />
-          <Parameter Name="Habilitado" Type="bit" Mode="In" />
-        </Function>
         <Function Name="InsertarPalto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Descripcion" Type="nvarchar" Mode="In" />
           <Parameter Name="Precio" Type="money" Mode="In" />
@@ -138,38 +135,23 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
           <Parameter Name="Nombre" Type="nvarchar" Mode="In" />
           <Parameter Name="Fotografia" Type="image" Mode="In" />
         </Function>
-        <Function Name="Modificar_Usuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="UsuarioId" Type="int" Mode="In" />
-          <Parameter Name="TipoUsuario" Type="int" Mode="In" />
-          <Parameter Name="Contraseña" Type="nvarchar" Mode="In" />
-          <Parameter Name="NombreUsusario" Type="nvarchar" Mode="In" />
-          <Parameter Name="Telefono" Type="nvarchar" Mode="In" />
-          <Parameter Name="Direccion" Type="nvarchar" Mode="In" />
-          <Parameter Name="Habilitado" Type="bit" Mode="In" />
-        </Function>
-        <Function Name="MostrarClientes" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LenguajesProyectoModelStoreContainer">
           <EntitySet Name="Estado" EntityType="Self.Estado" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Linea_Pedido" EntityType="Self.Linea_Pedido" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Pedido" EntityType="Self.Pedido" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Plato" EntityType="Self.Plato" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Usuario" EntityType="Self.Tipo_Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Vista_Clientes" EntityType="Self.Vista_Clientes" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Vista_Clientes].[UsuarioID] AS [UsuarioID], 
-    [Vista_Clientes].[NombreUsusario] AS [NombreUsusario], 
-    [Vista_Clientes].[Telefono] AS [Telefono], 
-    [Vista_Clientes].[Direccion] AS [Direccion], 
-    [Vista_Clientes].[Descripcion] AS [Descripcion], 
-    [Vista_Clientes].[HabilitadoS/N] AS [HabilitadoS/N]
-    FROM [dbo].[Vista_Clientes] AS [Vista_Clientes]</DefiningQuery>
-          </EntitySet>
+          <AssociationSet Name="FK_Linea_Pedido_Pedido" Association="Self.FK_Linea_Pedido_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linea_Pedido_Plato" Association="Self.FK_Linea_Pedido_Plato">
+            <End Role="Plato" EntitySet="Plato" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
+          </AssociationSet>
           <AssociationSet Name="FK_Pedido_Estado" Association="Self.FK_Pedido_Estado">
             <End Role="Estado" EntitySet="Estado" />
-            <End Role="Pedido" EntitySet="Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Pedido_Plato" Association="Self.FK_Pedido_Plato">
-            <End Role="Plato" EntitySet="Plato" />
             <End Role="Pedido" EntitySet="Pedido" />
           </AssociationSet>
           <AssociationSet Name="FK_Pedido_Usuario" Association="Self.FK_Pedido_Usuario">
@@ -181,7 +163,8 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LenguajesProyectoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -193,17 +176,29 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
           <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Estado" FromRole="Estado" ToRole="Pedido" />
         </EntityType>
+        <EntityType Name="Linea_Pedido">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+            <PropertyRef Name="PlatoID" />
+          </Key>
+          <Property Name="PedidoID" Type="Int32" Nullable="false" />
+          <Property Name="PrecioPorPlato" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PlatoID" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cantidad" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Pedido" Relationship="Self.FK_Linea_Pedido_Pedido" FromRole="Linea_Pedido" ToRole="Pedido" />
+          <NavigationProperty Name="Plato" Relationship="Self.FK_Linea_Pedido_Plato" FromRole="Linea_Pedido" ToRole="Plato" />
+        </EntityType>
         <EntityType Name="Pedido">
           <Key>
             <PropertyRef Name="PedidoID" />
           </Key>
           <Property Name="PedidoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="PlatoID" Type="Int32" />
           <Property Name="EstadoID" Type="Byte" Nullable="false" />
-          <Property Name="UsuarioID" Type="Int32" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
           <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="Estado" Relationship="Self.FK_Pedido_Estado" FromRole="Pedido" ToRole="Estado" />
-          <NavigationProperty Name="Plato" Relationship="Self.FK_Pedido_Plato" FromRole="Pedido" ToRole="Plato" />
+          <NavigationProperty Name="Linea_Pedido" Relationship="Self.FK_Linea_Pedido_Pedido" FromRole="Pedido" ToRole="Linea_Pedido" />
           <NavigationProperty Name="Usuario" Relationship="Self.FK_Pedido_Usuario" FromRole="Pedido" ToRole="Usuario" />
         </EntityType>
         <EntityType Name="Plato">
@@ -213,10 +208,10 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
           <Property Name="PlatoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="DisponibleS_N" Type="Boolean" />
-          <Property Name="Fotografia" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="DisponibleS_N" Type="Boolean" Nullable="false" />
+          <Property Name="Fotografia" Type="Binary" MaxLength="Max" FixedLength="false" />
           <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Plato" FromRole="Plato" ToRole="Pedido" />
+          <NavigationProperty Name="Linea_Pedido" Relationship="Self.FK_Linea_Pedido_Plato" FromRole="Plato" ToRole="Linea_Pedido" />
         </EntityType>
         <EntityType Name="Tipo_Usuario">
           <Key>
@@ -252,20 +247,32 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Pedido_Plato">
-          <End Role="Plato" Type="Self.Plato" Multiplicity="0..1" />
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
+        <Association Name="FK_Linea_Pedido_Pedido">
+          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
+          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="Linea_Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Linea_Pedido_Plato">
+          <End Role="Plato" Type="Self.Plato" Multiplicity="1" />
+          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Plato">
               <PropertyRef Name="PlatoID" />
             </Principal>
-            <Dependent Role="Pedido">
+            <Dependent Role="Linea_Pedido">
               <PropertyRef Name="PlatoID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Pedido_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
           <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Usuario">
@@ -288,8 +295,9 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="db_LenguajesProyecto" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="dbLenguajesProyectoEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Estado" EntityType="Self.Estado" />
+          <EntitySet Name="Linea_Pedido" EntityType="Self.Linea_Pedido" />
           <EntitySet Name="Pedido" EntityType="Self.Pedido" />
           <EntitySet Name="Plato" EntityType="Self.Plato" />
           <EntitySet Name="Tipo_Usuario" EntityType="Self.Tipo_Usuario" />
@@ -298,9 +306,13 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             <End Role="Estado" EntitySet="Estado" />
             <End Role="Pedido" EntitySet="Pedido" />
           </AssociationSet>
-          <AssociationSet Name="FK_Pedido_Plato" Association="Self.FK_Pedido_Plato">
-            <End Role="Plato" EntitySet="Plato" />
+          <AssociationSet Name="FK_Linea_Pedido_Pedido" Association="Self.FK_Linea_Pedido_Pedido">
             <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Linea_Pedido_Plato" Association="Self.FK_Linea_Pedido_Plato">
+            <End Role="Plato" EntitySet="Plato" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
           </AssociationSet>
           <AssociationSet Name="FK_Pedido_Usuario" Association="Self.FK_Pedido_Usuario">
             <End Role="Usuario" EntitySet="Usuario" />
@@ -311,21 +323,10 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
           <FunctionImport Name="Borrar">
-          <Parameter Name="PlatoID" Mode="In" Type="Int32" />
+            <Parameter Name="PlatoID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Buscar" ReturnType="Collection(LenguajesProyectoModel.Buscar_Result)">
-          <Parameter Name="Name" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="eliminar_Usuario">
-          <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="insert_Usuario">
-            <Parameter Name="TipoUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="Contraseña" Mode="In" Type="String" />
-            <Parameter Name="NombreUsusario" Mode="In" Type="String" />
-            <Parameter Name="Telefono" Mode="In" Type="String" />
-            <Parameter Name="Direccion" Mode="In" Type="String" />
-            <Parameter Name="Habilitado" Mode="In" Type="Boolean" />
+            <Parameter Name="Name" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="InsertarPalto">
             <Parameter Name="Descripcion" Mode="In" Type="String" />
@@ -334,52 +335,21 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="Fotografia" Mode="In" Type="Binary" />
           </FunctionImport>
-          <FunctionImport Name="Modificar_Usuario">
-            <Parameter Name="UsuarioId" Mode="In" Type="Int32" />
-            <Parameter Name="TipoUsuario" Mode="In" Type="Int32" />
-            <Parameter Name="Contraseña" Mode="In" Type="String" />
-            <Parameter Name="NombreUsusario" Mode="In" Type="String" />
-            <Parameter Name="Telefono" Mode="In" Type="String" />
-            <Parameter Name="Direccion" Mode="In" Type="String" />
-            <Parameter Name="Habilitado" Mode="In" Type="Boolean" />
-          </FunctionImport>
-          <FunctionImport Name="MostrarClientes" ReturnType="Collection(LenguajesProyectoModel.MostrarClientes_Result)" />
-          <EntitySet Name="Vista_Clientes" EntityType="LenguajesProyectoModel.Vista_Clientes" />
         </EntityContainer>
         <ComplexType Name="Buscar_Result">
           <Property Type="Int32" Name="PlatoID" Nullable="false" />
           <Property Type="String" Name="Descripcion" Nullable="false" MaxLength="200" />
           <Property Type="Decimal" Name="Precio" Nullable="false" Precision="19" />
-          <Property Type="Boolean" Name="DisponibleS_N" Nullable="true" />
-          <Property Type="Binary" Name="Fotografia" Nullable="false" MaxLength="Max" />
+          <Property Type="Boolean" Name="DisponibleS_N" Nullable="false" />
+          <Property Type="Binary" Name="Fotografia" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
         </ComplexType>
-        <ComplexType Name="MostrarClientes_Result">
-          <Property Type="Int32" Name="UsuarioID" Nullable="false" />
-          <Property Type="String" Name="NombreUsusario" Nullable="false" MaxLength="50" />
-          <Property Type="String" Name="Telefono" Nullable="true" MaxLength="8" />
-          <Property Type="String" Name="Direccion" Nullable="true" MaxLength="10" />
-          <Property Type="String" Name="Descripcion" Nullable="true" MaxLength="100" />
-          <Property Type="Boolean" Name="HabilitadoS_N" Nullable="true" />
-        </ComplexType>
-        <EntityType Name="Vista_Clientes">
-          <Key>
-            <PropertyRef Name="UsuarioID" />
-            <PropertyRef Name="NombreUsusario" />
-          </Key>
-          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
-          <Property Name="NombreUsusario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Telefono" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="Direccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="HabilitadoS_N" Type="Boolean" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="LenguajesProyectoModelStoreContainer" CdmEntityContainer="db_LenguajesProyecto">
+        <EntityContainerMapping StorageEntityContainer="LenguajesProyectoModelStoreContainer" CdmEntityContainer="dbLenguajesProyectoEntities">
           <EntitySetMapping Name="Estado">
             <EntityTypeMapping TypeName="LenguajesProyectoModel.Estado">
               <MappingFragment StoreEntitySet="Estado">
@@ -388,11 +358,21 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Linea_Pedido">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Linea_Pedido">
+              <MappingFragment StoreEntitySet="Linea_Pedido">
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+                <ScalarProperty Name="PrecioPorPlato" ColumnName="PrecioPorPlato" />
+                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Pedido">
             <EntityTypeMapping TypeName="LenguajesProyectoModel.Pedido">
               <MappingFragment StoreEntitySet="Pedido">
                 <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
-                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
                 <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
                 <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
                 <ScalarProperty Name="Fecha" ColumnName="Fecha" />
@@ -445,34 +425,7 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.Vista_Clientes' no tie
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="eliminar_Usuario" FunctionName="LenguajesProyectoModel.Store.eliminar_Usuario" />
-          <FunctionImportMapping FunctionImportName="insert_Usuario" FunctionName="LenguajesProyectoModel.Store.insert_Usuario" />
           <FunctionImportMapping FunctionImportName="InsertarPalto" FunctionName="LenguajesProyectoModel.Store.InsertarPalto" />
-          <FunctionImportMapping FunctionImportName="Modificar_Usuario" FunctionName="LenguajesProyectoModel.Store.Modificar_Usuario" />
-          <FunctionImportMapping FunctionImportName="MostrarClientes" FunctionName="LenguajesProyectoModel.Store.MostrarClientes">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="LenguajesProyectoModel.MostrarClientes_Result">
-                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
-                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <EntitySetMapping Name="Vista_Clientes">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Vista_Clientes">
-              <MappingFragment StoreEntitySet="Vista_Clientes">
-                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
-                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

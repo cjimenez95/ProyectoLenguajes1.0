@@ -14,14 +14,20 @@ namespace Entidad
     
     public partial class Pedido
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Pedido()
+        {
+            this.Linea_Pedido = new HashSet<Linea_Pedido>();
+        }
+    
         public int PedidoID { get; set; }
-        public Nullable<int> PlatoID { get; set; }
         public byte EstadoID { get; set; }
-        public Nullable<int> UsuarioID { get; set; }
+        public int UsuarioID { get; set; }
         public System.DateTime Fecha { get; set; }
     
         public virtual Estado Estado { get; set; }
-        public virtual Plato Plato { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Linea_Pedido> Linea_Pedido { get; set; }
         public virtual Usuario Usuario { get; set; }
     }
 }

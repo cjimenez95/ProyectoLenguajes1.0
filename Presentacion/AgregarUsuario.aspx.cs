@@ -25,7 +25,7 @@ namespace Presentacion
           
             if (validacion.validarContra(contrasena.Text, TextBox7.Text) == true)
             {
-                usuarios.agregarUsuario(Convert.ToInt32(tipo_Usuario.Text), validacion.GetMd5Hash(md5, contrasena.Text), Nombre_Usuario.Text, telefono_.Text, Direccion_.Text, Convert.ToBoolean(DropDownList1.Text));
+                //usuarios.agregarUsuario(Convert.ToInt32(tipo_Usuario.Text), validacion.GetMd5Hash(md5, contrasena.Text), Nombre_Usuario.Text, telefono_.Text, Direccion_.Text, Convert.ToBoolean(DropDownList1.Text));
             }
         }
     }

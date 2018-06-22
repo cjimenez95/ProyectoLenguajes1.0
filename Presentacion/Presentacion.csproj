@@ -75,6 +75,10 @@
     <None Include="packages.config" />
     <Content Include="AgregarUsuario.aspx" />
     <Content Include="EliminarUsuarios.aspx" />
+    <Content Include="InicioAdmin.aspx" />
+    <Content Include="InicioCliente.aspx" />
+    <Content Include="InicioCocina.aspx" />
+    <Content Include="InicioSesion.aspx" />
     <Content Include="ModificarUsuarios.aspx" />
     <Content Include="PaginaMaestra.Master" />
     <None Include="Web.Debug.config">
@@ -102,6 +106,34 @@
     </Compile>
     <Compile Include="EliminarUsuarios.aspx.designer.cs">
       <DependentUpon>EliminarUsuarios.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InicioAdmin.aspx.cs">
+      <DependentUpon>InicioAdmin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioAdmin.aspx.designer.cs">
+      <DependentUpon>InicioAdmin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InicioCliente.aspx.cs">
+      <DependentUpon>InicioCliente.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioCliente.aspx.designer.cs">
+      <DependentUpon>InicioCliente.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InicioCocina.aspx.cs">
+      <DependentUpon>InicioCocina.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioCocina.aspx.designer.cs">
+      <DependentUpon>InicioCocina.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InicioSesion.aspx.cs">
+      <DependentUpon>InicioSesion.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InicioSesion.aspx.designer.cs">
+      <DependentUpon>InicioSesion.aspx</DependentUpon>
     </Compile>
     <Compile Include="Insertar.aspx.cs">
       <DependentUpon>Insertar.aspx</DependentUpon>

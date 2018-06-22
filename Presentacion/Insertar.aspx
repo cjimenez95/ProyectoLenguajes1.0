@@ -8,7 +8,7 @@
             height: 23px;
         }
         .auto-style3 {
-            height: 335px;
+            height: 82px;
         }
         .auto-style4 {
             width: 222px;
@@ -18,7 +18,7 @@
             width: 222px;
         }
         .auto-style6 {
-            height: 335px;
+            height: 82px;
             width: 222px;
         }
         .auto-style7 {
@@ -31,17 +31,10 @@
         .auto-style10 {
             height: 6px;
         }
-        .auto-style11 {
-            width: 222px;
-            height: 26px;
-        }
-        .auto-style12 {
-            height: 26px;
-        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <table class="auto-style1" style="font-family: 'Lucida Console'; font-size: 18px; color: #000000; background-image: none;">
+    <table class="auto-style1">
         <tr>
             <td class="auto-style4">Descripcion&nbsp; :</td>
             <td>
@@ -52,20 +45,20 @@
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td class="auto-style11">Precio: </td>
-            <td class="auto-style12">
+            <td class="auto-style4">Precio: </td>
+            <td>
                 <asp:TextBox ID="TBPrecio" runat="server"></asp:TextBox>
             </td>
-            <td class="auto-style12"></td>
-            <td class="auto-style12"></td>
-            <td class="auto-style12"></td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
         </tr>
         <tr>
             <td class="auto-style5">Fotografia: </td>
             <td class="auto-style2">
                 <asp:FileUpload ID="FUFotografia" runat="server" />
             </td>
-            <td class="auto-style2"></td>
+            <td class="auto-style2">&nbsp;</td>
             <td class="auto-style2"></td>
             <td class="auto-style2"></td>
         </tr>
@@ -92,7 +85,7 @@
             <td class="auto-style6">
                 <asp:Button ID="BInsertar" runat="server" OnClick="BInsertar_Click" Text="Insertar" />
             </td>
-            <td class="auto-style3"></td>
+            <td class="auto-style3">&nbsp;</td>
             <td class="auto-style3"></td>
             <td class="auto-style3"></td>
             <td class="auto-style3"></td>

@@ -22,7 +22,7 @@ namespace Presentacion
         }
         public void cargarGrid()
         {
-            GridView1.DataSource = usuario.listaBorrar();
+           // GridView1.DataSource = usuario.listaBorrar();
             GridView1.DataBind();
         }
         protected void Button1_Click(object sender, EventArgs e)
