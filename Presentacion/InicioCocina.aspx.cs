@@ -1,6 +1,7 @@
 ﻿using System;
 using Negocio;
 using System.Web.UI.WebControls;
+using System.Drawing;
 
 namespace Presentacion
 {
@@ -15,12 +16,23 @@ namespace Presentacion
         {
             GridCocina.DataSource = cocina.orden();
             GridCocina.DataBind();
+            colorOrden();
         }
         private void colorOrden()
         {
             for (int i = 0; i < GridCocina.Rows.Count; i++)
             {
                 String valor = GridCocina.Rows[i].Cells[2].Text;
+                if (valor.Equals("A Tiempo"))
+                {
+                    GridCocina.Rows[i].BackColor = Color.LightGreen;
+                }else if (valor.Equals("Sobre Tiempo"))
+                {
+                    GridCocina.Rows[i].BackColor = Color.LightYellow;
+                }else if (valor.Equals("Demorado"))
+                {
+                    GridCocina.Rows[i].BackColor = Color.Tomato;
+                }
             }
         }
 
