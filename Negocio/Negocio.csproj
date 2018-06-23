@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CocinaNegocio.cs" />
     <Compile Include="ManejadorUsuarios.cs" />
     <Compile Include="PlatoNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

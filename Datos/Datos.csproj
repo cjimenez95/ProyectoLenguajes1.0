@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DatosCocina.cs" />
     <Compile Include="DatosPlato.cs" />
     <Compile Include="DatosUsuario.cs" />
     <Compile Include="Model1.Context.cs">
