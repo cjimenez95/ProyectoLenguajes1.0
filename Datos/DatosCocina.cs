@@ -15,5 +15,13 @@ namespace Datos
         {
             return db.ORDEN_VISTA.ToList();
         }
+        public void actualizarEntregado(int pedidoID)
+        {
+            db.ACTUALIZAR_ESTADO(pedidoID);
+        }
+        public int cantidadOrdenes()
+        {
+            return db.CANTIDAD_ORDENES.ToList().Count;
+        }
     }
 }

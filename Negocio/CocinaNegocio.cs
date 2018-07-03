@@ -16,5 +16,13 @@ namespace Negocio
         {
             return cocina.orden();
         }
+        public void actualizarEntregado(int pedidoID)
+        {
+            cocina.actualizarEntregado(pedidoID);
+        }
+        public int cantidadOrdenes()
+        {
+            return cocina.cantidadOrdenes();
+        }
     }
 }

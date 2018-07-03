@@ -73,6 +73,15 @@
           <Property Name="HabilitadoS/N" Type="bit" />
         </EntityType>
         <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.CANTIDAD_ORDENES' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="CANTIDAD_ORDENES">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+          </Key>
+          <Property Name="PedidoID" Type="int" Nullable="false" />
+          <Property Name="Cantidad_Ordenes" Type="int" />
+        </EntityType>
+        <!--Errores durante la generación:
 advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
         <EntityType Name="ORDEN_VISTA">
           <Key>
@@ -144,6 +153,9 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="ACTUALIZAR_ESTADO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="NUM_PEDIDO" Type="int" Mode="In" />
+        </Function>
         <Function Name="Borrar" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="PlatoID" Type="int" Mode="In" />
         </Function>
@@ -199,6 +211,12 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipo_Usuario" EntityType="Self.Tipo_Usuario" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CANTIDAD_ORDENES" EntityType="Self.CANTIDAD_ORDENES" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CANTIDAD_ORDENES].[PedidoID] AS [PedidoID], 
+    [CANTIDAD_ORDENES].[Cantidad_Ordenes] AS [Cantidad_Ordenes]
+    FROM [dbo].[CANTIDAD_ORDENES] AS [CANTIDAD_ORDENES]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="ORDEN_VISTA" EntityType="Self.ORDEN_VISTA" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [ORDEN_VISTA].[PedidoID] AS [PedidoID], 
@@ -231,160 +249,7 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="LenguajesProyectoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Estado">
-          <Key>
-            <PropertyRef Name="EstadoID" />
-          </Key>
-          <Property Name="EstadoID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Estado" FromRole="Estado" ToRole="Pedido" />
-        </EntityType>
-        <EntityType Name="Linea_Pedido">
-          <Key>
-            <PropertyRef Name="PedidoID" />
-            <PropertyRef Name="PlatoID" />
-          </Key>
-          <Property Name="PedidoID" Type="Int32" Nullable="false" />
-          <Property Name="PrecioPorPlato" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="PlatoID" Type="Int32" Nullable="false" />
-          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Cantidad" Type="Byte" Nullable="false" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_Linea_Pedido_Pedido" FromRole="Linea_Pedido" ToRole="Pedido" />
-          <NavigationProperty Name="Plato" Relationship="Self.FK_Linea_Pedido_Plato" FromRole="Linea_Pedido" ToRole="Plato" />
-        </EntityType>
-        <EntityType Name="Pedido">
-          <Key>
-            <PropertyRef Name="PedidoID" />
-          </Key>
-          <Property Name="PedidoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EstadoID" Type="Byte" Nullable="false" />
-          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
-          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Estado" Relationship="Self.FK_Pedido_Estado" FromRole="Pedido" ToRole="Estado" />
-          <NavigationProperty Name="Linea_Pedido" Relationship="Self.FK_Linea_Pedido_Pedido" FromRole="Pedido" ToRole="Linea_Pedido" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK_Pedido_Usuario" FromRole="Pedido" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Plato">
-          <Key>
-            <PropertyRef Name="PlatoID" />
-          </Key>
-          <Property Name="PlatoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Precio" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="DisponibleS_N" Type="Boolean" />
-          <Property Name="Fotografia" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Linea_Pedido" Relationship="Self.FK_Linea_Pedido_Plato" FromRole="Plato" ToRole="Linea_Pedido" />
-        </EntityType>
-        <EntityType Name="Tipo_Usuario">
-          <Key>
-            <PropertyRef Name="TipoUsuarioID" />
-          </Key>
-          <Property Name="TipoUsuarioID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Usuario" Relationship="Self.FK_USUARIO_TIPO_USUARIO" FromRole="Tipo_Usuario" ToRole="Usuario" />
-        </EntityType>
-        <EntityType Name="Usuario">
-          <Key>
-            <PropertyRef Name="UsuarioID" />
-          </Key>
-          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
-          <Property Name="TipoUsuarioID" Type="Byte" Nullable="false" />
-          <Property Name="Contraseña" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NombreUsusario" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Telefono" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="Direccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="HabilitadoS_N" Type="Boolean" />
-          <NavigationProperty Name="Pedido" Relationship="Self.FK_Pedido_Usuario" FromRole="Usuario" ToRole="Pedido" />
-          <NavigationProperty Name="Tipo_Usuario" Relationship="Self.FK_USUARIO_TIPO_USUARIO" FromRole="Usuario" ToRole="Tipo_Usuario" />
-        </EntityType>
-        <Association Name="FK_Pedido_Estado">
-          <End Role="Estado" Type="Self.Estado" Multiplicity="1" />
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Estado">
-              <PropertyRef Name="EstadoID" />
-            </Principal>
-            <Dependent Role="Pedido">
-              <PropertyRef Name="EstadoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Linea_Pedido_Pedido">
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="1" />
-          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Pedido">
-              <PropertyRef Name="PedidoID" />
-            </Principal>
-            <Dependent Role="Linea_Pedido">
-              <PropertyRef Name="PedidoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Linea_Pedido_Plato">
-          <End Role="Plato" Type="Self.Plato" Multiplicity="1" />
-          <End Role="Linea_Pedido" Type="Self.Linea_Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plato">
-              <PropertyRef Name="PlatoID" />
-            </Principal>
-            <Dependent Role="Linea_Pedido">
-              <PropertyRef Name="PlatoID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Pedido_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
-          <End Role="Pedido" Type="Self.Pedido" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="UsuarioID" />
-            </Principal>
-            <Dependent Role="Pedido">
-              <PropertyRef Name="UsuarioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_USUARIO_TIPO_USUARIO">
-          <End Role="Tipo_Usuario" Type="Self.Tipo_Usuario" Multiplicity="1" />
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Tipo_Usuario">
-              <PropertyRef Name="TipoUsuarioID" />
-            </Principal>
-            <Dependent Role="Usuario">
-              <PropertyRef Name="TipoUsuarioID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="dbLenguajesProyectoEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Estado" EntityType="Self.Estado" />
-          <EntitySet Name="Linea_Pedido" EntityType="Self.Linea_Pedido" />
-          <EntitySet Name="Pedido" EntityType="Self.Pedido" />
-          <EntitySet Name="Plato" EntityType="Self.Plato" />
-          <EntitySet Name="Tipo_Usuario" EntityType="Self.Tipo_Usuario" />
-          <EntitySet Name="Usuario" EntityType="Self.Usuario" />
-          <AssociationSet Name="FK_Pedido_Estado" Association="Self.FK_Pedido_Estado">
-            <End Role="Estado" EntitySet="Estado" />
-            <End Role="Pedido" EntitySet="Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Linea_Pedido_Pedido" Association="Self.FK_Linea_Pedido_Pedido">
-            <End Role="Pedido" EntitySet="Pedido" />
-            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Linea_Pedido_Plato" Association="Self.FK_Linea_Pedido_Plato">
-            <End Role="Plato" EntitySet="Plato" />
-            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Pedido_Usuario" Association="Self.FK_Pedido_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Pedido" EntitySet="Pedido" />
-          </AssociationSet>
-          <AssociationSet Name="FK_USUARIO_TIPO_USUARIO" Association="Self.FK_USUARIO_TIPO_USUARIO">
-            <End Role="Tipo_Usuario" EntitySet="Tipo_Usuario" />
-            <End Role="Usuario" EntitySet="Usuario" />
-          </AssociationSet>
           <FunctionImport Name="Borrar">
           <Parameter Name="PlatoID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -398,7 +263,6 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="Fotografia" Mode="In" Type="Binary" />
           </FunctionImport>
-          <EntitySet Name="sysdiagrams" EntityType="LenguajesProyectoModel.sysdiagrams" />
           <FunctionImport Name="PLATO_ORDEN" ReturnType="Collection(LenguajesProyectoModel.PLATO_ORDEN_Result)">
           <Parameter Name="NUM_PEDIDO" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -432,7 +296,39 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="ACTUALIZAR_ESTADO">
+          <Parameter Name="NUM_PEDIDO" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CANTIDAD" ReturnType="Collection(Int32)" />
+          <EntitySet Name="Estado" EntityType="LenguajesProyectoModel.Estado" />
+          <EntitySet Name="Linea_Pedido" EntityType="LenguajesProyectoModel.Linea_Pedido" />
+          <EntitySet Name="Pedido" EntityType="LenguajesProyectoModel.Pedido" />
+          <EntitySet Name="Plato" EntityType="LenguajesProyectoModel.Plato" />
+          <EntitySet Name="sysdiagrams" EntityType="LenguajesProyectoModel.sysdiagrams" />
+          <EntitySet Name="Tipo_Usuario" EntityType="LenguajesProyectoModel.Tipo_Usuario" />
+          <EntitySet Name="Usuario" EntityType="LenguajesProyectoModel.Usuario" />
           <EntitySet Name="ORDEN_VISTA" EntityType="LenguajesProyectoModel.ORDEN_VISTA" />
+          <AssociationSet Name="FK_Pedido_Estado" Association="LenguajesProyectoModel.FK_Pedido_Estado">
+            <End Role="Estado" EntitySet="Estado" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LINEA_PEDIDO_Pedido" Association="LenguajesProyectoModel.FK_LINEA_PEDIDO_Pedido">
+            <End Role="Pedido" EntitySet="Pedido" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LINEA_PEDIDO_Plato" Association="LenguajesProyectoModel.FK_LINEA_PEDIDO_Plato">
+            <End Role="Plato" EntitySet="Plato" />
+            <End Role="Linea_Pedido" EntitySet="Linea_Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Pedido_Usuario" Association="LenguajesProyectoModel.FK_Pedido_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Pedido" EntitySet="Pedido" />
+          </AssociationSet>
+          <AssociationSet Name="FK_USUARIO_TIPO_USUARIO" Association="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO">
+            <End Role="Tipo_Usuario" EntitySet="Tipo_Usuario" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <EntitySet Name="CANTIDAD_ORDENES" EntityType="LenguajesProyectoModel.CANTIDAD_ORDENES" />
         </EntityContainer>
         <ComplexType Name="Buscar_Result">
           <Property Type="Int32" Name="PlatoID" Nullable="false" />
@@ -442,16 +338,6 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
           <Property Type="Binary" Name="Fotografia" Nullable="true" MaxLength="Max" />
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
         </ComplexType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <ComplexType Name="PLATO_ORDEN_Result">
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
           <Property Type="Byte" Name="Cantidad" Nullable="false" />
@@ -468,6 +354,83 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="Estado">
+          <Key>
+            <PropertyRef Name="EstadoID" />
+          </Key>
+          <Property Name="EstadoID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Pedido" Relationship="LenguajesProyectoModel.FK_Pedido_Estado" FromRole="Estado" ToRole="Pedido" />
+        </EntityType>
+        <EntityType Name="Linea_Pedido">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+            <PropertyRef Name="PlatoID" />
+          </Key>
+          <Property Name="PedidoID" Type="Int32" Nullable="false" />
+          <Property Name="PrecioPorPlato" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="PlatoID" Type="Int32" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Cantidad" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Pedido" Relationship="LenguajesProyectoModel.FK_LINEA_PEDIDO_Pedido" FromRole="Linea_Pedido" ToRole="Pedido" />
+          <NavigationProperty Name="Plato" Relationship="LenguajesProyectoModel.FK_LINEA_PEDIDO_Plato" FromRole="Linea_Pedido" ToRole="Plato" />
+        </EntityType>
+        <EntityType Name="Pedido">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+          </Key>
+          <Property Name="PedidoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EstadoID" Type="Byte" Nullable="false" />
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Estado" Relationship="LenguajesProyectoModel.FK_Pedido_Estado" FromRole="Pedido" ToRole="Estado" />
+          <NavigationProperty Name="Linea_Pedido" Relationship="LenguajesProyectoModel.FK_LINEA_PEDIDO_Pedido" FromRole="Pedido" ToRole="Linea_Pedido" />
+          <NavigationProperty Name="Usuario" Relationship="LenguajesProyectoModel.FK_Pedido_Usuario" FromRole="Pedido" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Plato">
+          <Key>
+            <PropertyRef Name="PlatoID" />
+          </Key>
+          <Property Name="PlatoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Precio" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DisponibleS_N" Type="Boolean" />
+          <Property Name="Fotografia" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Linea_Pedido" Relationship="LenguajesProyectoModel.FK_LINEA_PEDIDO_Plato" FromRole="Plato" ToRole="Linea_Pedido" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Tipo_Usuario">
+          <Key>
+            <PropertyRef Name="TipoUsuarioID" />
+          </Key>
+          <Property Name="TipoUsuarioID" Type="Byte" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descripcion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Usuario" Relationship="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" FromRole="Tipo_Usuario" ToRole="Usuario" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="UsuarioID" />
+          </Key>
+          <Property Name="UsuarioID" Type="Int32" Nullable="false" />
+          <Property Name="TipoUsuarioID" Type="Byte" Nullable="false" />
+          <Property Name="Contraseña" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NombreUsusario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Telefono" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Direccion" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="HabilitadoS_N" Type="Boolean" />
+          <NavigationProperty Name="Pedido" Relationship="LenguajesProyectoModel.FK_Pedido_Usuario" FromRole="Usuario" ToRole="Pedido" />
+          <NavigationProperty Name="Tipo_Usuario" Relationship="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" FromRole="Usuario" ToRole="Tipo_Usuario" />
+        </EntityType>
         <EntityType Name="ORDEN_VISTA">
           <Key>
             <PropertyRef Name="PedidoID" />
@@ -478,74 +441,79 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
           <Property Name="NombreUsusario" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ESTADO" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-      </Schema>
+        <Association Name="FK_Pedido_Estado">
+          <End Type="LenguajesProyectoModel.Estado" Role="Estado" Multiplicity="1" />
+          <End Type="LenguajesProyectoModel.Pedido" Role="Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Estado">
+              <PropertyRef Name="EstadoID" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="EstadoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LINEA_PEDIDO_Pedido">
+          <End Type="LenguajesProyectoModel.Pedido" Role="Pedido" Multiplicity="1" />
+          <End Type="LenguajesProyectoModel.Linea_Pedido" Role="Linea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Principal>
+            <Dependent Role="Linea_Pedido">
+              <PropertyRef Name="PedidoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LINEA_PEDIDO_Plato">
+          <End Type="LenguajesProyectoModel.Plato" Role="Plato" Multiplicity="1" />
+          <End Type="LenguajesProyectoModel.Linea_Pedido" Role="Linea_Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plato">
+              <PropertyRef Name="PlatoID" />
+            </Principal>
+            <Dependent Role="Linea_Pedido">
+              <PropertyRef Name="PlatoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Pedido_Usuario">
+          <End Type="LenguajesProyectoModel.Usuario" Role="Usuario" Multiplicity="1" />
+          <End Type="LenguajesProyectoModel.Pedido" Role="Pedido" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="UsuarioID" />
+            </Principal>
+            <Dependent Role="Pedido">
+              <PropertyRef Name="UsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_USUARIO_TIPO_USUARIO">
+          <End Type="LenguajesProyectoModel.Tipo_Usuario" Role="Tipo_Usuario" Multiplicity="1" />
+          <End Type="LenguajesProyectoModel.Usuario" Role="Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tipo_Usuario">
+              <PropertyRef Name="TipoUsuarioID" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="TipoUsuarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CANTIDAD_ORDENES">
+          <Key>
+            <PropertyRef Name="PedidoID" />
+          </Key>
+          <Property Name="PedidoID" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad_Ordenes1" Type="Int32" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="LenguajesProyectoModelStoreContainer" CdmEntityContainer="dbLenguajesProyectoEntities">
-          <EntitySetMapping Name="Estado">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Estado">
-              <MappingFragment StoreEntitySet="Estado">
-                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Linea_Pedido">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Linea_Pedido">
-              <MappingFragment StoreEntitySet="Linea_Pedido">
-                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
-                <ScalarProperty Name="PrecioPorPlato" ColumnName="PrecioPorPlato" />
-                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Pedido">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Pedido">
-              <MappingFragment StoreEntitySet="Pedido">
-                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
-                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
-                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
-                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Plato">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Plato">
-              <MappingFragment StoreEntitySet="Plato">
-                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-                <ScalarProperty Name="Precio" ColumnName="Precio" />
-                <ScalarProperty Name="DisponibleS_N" ColumnName="DisponibleS/N" />
-                <ScalarProperty Name="Fotografia" ColumnName="Fotografia" />
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Tipo_Usuario">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Tipo_Usuario">
-              <MappingFragment StoreEntitySet="Tipo_Usuario">
-                <ScalarProperty Name="TipoUsuarioID" ColumnName="TipoUsuarioID" />
-                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Usuario">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.Usuario">
-              <MappingFragment StoreEntitySet="Usuario">
-                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
-                <ScalarProperty Name="TipoUsuarioID" ColumnName="TipoUsuarioID" />
-                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
-                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
-                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
-                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
-                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="Borrar" FunctionName="LenguajesProyectoModel.Store.Borrar" />
           <FunctionImportMapping FunctionImportName="Buscar" FunctionName="LenguajesProyectoModel.Store.Buscar">
             <ResultMapping>
@@ -560,17 +528,6 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="InsertarPalto" FunctionName="LenguajesProyectoModel.Store.InsertarPalto" />
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="LenguajesProyectoModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="PLATO_ORDEN" FunctionName="LenguajesProyectoModel.Store.PLATO_ORDEN">
             <ResultMapping>
               <ComplexTypeMapping TypeName="LenguajesProyectoModel.PLATO_ORDEN_Result">
@@ -604,6 +561,80 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="LenguajesProyectoModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="LenguajesProyectoModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="ACTUALIZAR_ESTADO" FunctionName="LenguajesProyectoModel.Store.ACTUALIZAR_ESTADO" />
+          <EntitySetMapping Name="Estado">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Estado">
+              <MappingFragment StoreEntitySet="Estado">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Linea_Pedido">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Linea_Pedido">
+              <MappingFragment StoreEntitySet="Linea_Pedido">
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
+                <ScalarProperty Name="PrecioPorPlato" ColumnName="PrecioPorPlato" />
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pedido">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Pedido">
+              <MappingFragment StoreEntitySet="Pedido">
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+                <ScalarProperty Name="EstadoID" ColumnName="EstadoID" />
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plato">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Plato">
+              <MappingFragment StoreEntitySet="Plato">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Fotografia" ColumnName="Fotografia" />
+                <ScalarProperty Name="DisponibleS_N" ColumnName="DisponibleS/N" />
+                <ScalarProperty Name="Precio" ColumnName="Precio" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="PlatoID" ColumnName="PlatoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Tipo_Usuario">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Tipo_Usuario">
+              <MappingFragment StoreEntitySet="Tipo_Usuario">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="TipoUsuarioID" ColumnName="TipoUsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuario">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="HabilitadoS_N" ColumnName="HabilitadoS/N" />
+                <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="NombreUsusario" ColumnName="NombreUsusario" />
+                <ScalarProperty Name="Contraseña" ColumnName="Contraseña" />
+                <ScalarProperty Name="TipoUsuarioID" ColumnName="TipoUsuarioID" />
+                <ScalarProperty Name="UsuarioID" ColumnName="UsuarioID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ORDEN_VISTA">
             <EntityTypeMapping TypeName="LenguajesProyectoModel.ORDEN_VISTA">
               <MappingFragment StoreEntitySet="ORDEN_VISTA">
@@ -613,7 +644,15 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="CANTIDAD_ORDENES">
+            <EntityTypeMapping TypeName="LenguajesProyectoModel.CANTIDAD_ORDENES">
+              <MappingFragment StoreEntitySet="CANTIDAD_ORDENES">
+                <ScalarProperty Name="Cantidad_Ordenes1" ColumnName="Cantidad_Ordenes" />
+                <ScalarProperty Name="PedidoID" ColumnName="PedidoID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -627,7 +666,7 @@ advertencia 6002: La tabla o vista 'LenguajesProyecto.dbo.ORDEN_VISTA' no tiene 
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />

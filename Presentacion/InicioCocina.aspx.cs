@@ -2,21 +2,40 @@
 using Negocio;
 using System.Web.UI.WebControls;
 using System.Drawing;
+using System.Web.Services;
 
 namespace Presentacion
 {
     public partial class InicioCocina : System.Web.UI.Page
     {
         private CocinaNegocio cocina = new CocinaNegocio();
+        private int platoId;
+        private static bool valorEntrega = false;
         protected void Page_Load(object sender, EventArgs e)
         {
-            cargarOrden();
+            if (!IsPostBack)
+            {
+                cargarOrden();
+            }
         }
         private void cargarOrden()
         {
             GridCocina.DataSource = cocina.orden();
             GridCocina.DataBind();
             colorOrden();
+            mostrarMensaje();
+        }
+        private void mostrarMensaje()
+        {
+            if (cocina.cantidadOrdenes() > 10)
+            {
+                Label1.Text = "HAY MAS ORDENES EN ESPERA";
+            }
+            else
+            {
+                Label1.Text = "";
+            }
+
         }
         private void colorOrden()
         {
@@ -26,10 +45,12 @@ namespace Presentacion
                 if (valor.Equals("A Tiempo"))
                 {
                     GridCocina.Rows[i].BackColor = Color.LightGreen;
-                }else if (valor.Equals("Sobre Tiempo"))
+                }
+                else if (valor.Equals("Sobre Tiempo"))
                 {
                     GridCocina.Rows[i].BackColor = Color.LightYellow;
-                }else if (valor.Equals("Demorado"))
+                }
+                else if (valor.Equals("Demorado"))
                 {
                     GridCocina.Rows[i].BackColor = Color.Tomato;
                 }
@@ -50,6 +71,39 @@ namespace Presentacion
                 gridPlatos.DataSource = cocina.platoOrden(ordenID);
                 gridPlatos.DataBind();
             }
+        }
+        [WebMethod]
+        public static void obtenerValorConfirmacion(bool valor)
+        {
+            valorEntrega = valor;   
+        }
+
+        protected void GridCocina_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName.Equals("seleccion"))
+            {
+                GridViewRow row = (GridViewRow)(((Button)e.CommandSource).NamingContainer);
+                platoId = Convert.ToInt32(this.GridCocina.Rows[row.RowIndex].Cells[0].Text);
+                gg();
+            }
+        }
+        public void gg()
+        {
+            if (valorEntrega)
+            {
+                cocina.actualizarEntregado(platoId);
+                cargarOrden();
+            }
+        }
+
+        protected void GridCocina_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Timer1_Tick(object sender, EventArgs e)
+        {
+            cargarOrden();
         }
     }
 }

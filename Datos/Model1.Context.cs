@@ -31,10 +31,11 @@ namespace Entidad
         public virtual DbSet<Linea_Pedido> Linea_Pedido { get; set; }
         public virtual DbSet<Pedido> Pedido { get; set; }
         public virtual DbSet<Plato> Plato { get; set; }
+        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tipo_Usuario> Tipo_Usuario { get; set; }
         public virtual DbSet<Usuario> Usuario { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<ORDEN_VISTA> ORDEN_VISTA { get; set; }
+        public virtual DbSet<CANTIDAD_ORDENES> CANTIDAD_ORDENES { get; set; }
     
         public virtual int Borrar(Nullable<int> platoID)
         {
@@ -189,6 +190,20 @@ namespace Entidad
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual int ACTUALIZAR_ESTADO(Nullable<int> nUM_PEDIDO)
+        {
+            var nUM_PEDIDOParameter = nUM_PEDIDO.HasValue ?
+                new ObjectParameter("NUM_PEDIDO", nUM_PEDIDO) :
+                new ObjectParameter("NUM_PEDIDO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ACTUALIZAR_ESTADO", nUM_PEDIDOParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> CANTIDAD()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CANTIDAD");
         }
     }
 }

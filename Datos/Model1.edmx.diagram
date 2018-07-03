@@ -5,19 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="da889f29b5874b52b18cd72ca1bfa9ae" Name="Diagram1">
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Estado" Width="1.5" PointX="3" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Linea_Pedido" Width="1.5" PointX="7.5" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Pedido" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Plato" Width="1.5" PointX="5.25" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Tipo_Usuario" Width="1.5" PointX="0.75" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.Usuario" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Estado" ManuallyRouted="false" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_Linea_Pedido_Pedido" ManuallyRouted="false" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_Linea_Pedido_Plato" ManuallyRouted="false" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Usuario" ManuallyRouted="false" />
-        <AssociationConnector Association="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.sysdiagrams" Width="1.5" PointX="7.375" PointY="4.75" />
-        <EntityTypeShape EntityType="LenguajesProyectoModel.ORDEN_VISTA" Width="1.5" PointX="7.375" PointY="7.75" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Estado" Width="1.5" PointX="3" PointY="5.5" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Linea_Pedido" Width="1.5" PointX="7.5" PointY="1.125" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Pedido" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Plato" Width="1.5" PointX="5.25" PointY="5.125" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Tipo_Usuario" Width="1.5" PointX="0.75" PointY="1.5" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.Usuario" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.ORDEN_VISTA" Width="1.5" PointX="7.75" PointY="7.75" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Estado" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_LINEA_PEDIDO_Pedido" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_LINEA_PEDIDO_Plato" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_Pedido_Usuario" />
+        <AssociationConnector Association="LenguajesProyectoModel.FK_USUARIO_TIPO_USUARIO" />
+        <EntityTypeShape EntityType="LenguajesProyectoModel.CANTIDAD_ORDENES" Width="1.5" PointX="0.75" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
